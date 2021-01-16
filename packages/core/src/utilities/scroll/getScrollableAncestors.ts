@@ -1,4 +1,5 @@
-import {isScrollable} from './isScrollable';
+import { isScrollable } from './isScrollable';
+import { isFixed } from '../position/isFixed'
 
 export function getScrollableAncestors(element: Node | null): Element[] {
   const scrollParents: Element[] = [];
@@ -19,6 +20,10 @@ export function getScrollableAncestors(element: Node | null): Element[] {
     }
 
     if (isScrollable(node)) {
+      // crazy stupid hotfix for positioning issue under fixed scroll ancestors. get offsetTop of the first ancestor only(!)
+      if (node && isFixed(node)) {
+        return [node]
+      }
       scrollParents.push(node);
     }
 
