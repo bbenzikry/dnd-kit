@@ -1,6 +1,6 @@
-import type {Coordinates, ClientRect, LayoutRect, ViewRect} from '../../types';
-import {getScrollableAncestors, getScrollOffsets} from '../scroll';
-import {defaultCoordinates} from '../coordinates';
+import type { Coordinates, ClientRect, LayoutRect, ViewRect } from '../../types';
+import { getScrollableAncestors, getScrollOffsets } from '../scroll';
+import { defaultCoordinates } from '../coordinates';
 
 function getEdgeOffset(
   node: HTMLElement | null,
@@ -24,8 +24,8 @@ function getEdgeOffset(
 }
 
 export function getElementLayout(element: HTMLElement): LayoutRect {
-  const {offsetWidth: width, offsetHeight: height} = element;
-  const {x: offsetLeft, y: offsetTop} = getEdgeOffset(element, null);
+  const { offsetWidth: width, offsetHeight: height } = element;
+  const { x: offsetLeft, y: offsetTop } = getEdgeOffset(element, null);
 
   return {
     width,
@@ -54,7 +54,7 @@ export function getBoundingClientRect(
     };
   }
 
-  const {offsetTop, offsetLeft} = getElementLayout(element);
+  const { offsetTop, offsetLeft } = getElementLayout(element);
   const {
     width,
     height,
@@ -77,8 +77,9 @@ export function getBoundingClientRect(
 }
 
 export function getViewRect(element: HTMLElement): ViewRect {
-  const {width, height, offsetTop, offsetLeft} = getElementLayout(element);
-  const scrollableAncestors = getScrollableAncestors(element.parentNode);
+  const { width, height, offsetTop, offsetLeft } = getElementLayout(element);
+  // make sure there are no duplicate elements here.
+  const scrollableAncestors = Array.from(new Set(getScrollableAncestors(element.parentNode)))
   const scrollOffsets = getScrollOffsets(scrollableAncestors);
 
   const top = offsetTop - scrollOffsets.y;
